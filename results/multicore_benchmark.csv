@@ -1,0 +1,9 @@
+# Unified Engineering Workbench - Multicore Execution Benchmark
+# CPU: 13th Gen Intel(R) Core(TM) i5-13420H | Physical Cores: 4 | Logical Cores: 8
+# Total RAM: 16024 MB | Compiler: GCC 16.2.0 MinGW-w64 | Flags: -O3 -march=native -DNDEBUG
+# Launch-to-Ready Time: 35.0000 ms
+# Workload: 5000 solves, mesh N=50
+worker_threads,rep1_ms,rep2_ms,rep3_ms,rep4_ms,rep5_ms,median_ms,mean_ms,std_dev_ms,speedup_T1_over_Tp,efficiency,max_abs_diff_C
+1,9.5289,12.5100,9.5249,9.9571,11.4649,9.9571,10.5972,1.1927,1.0000,1.0000,0.00e+00
+2,5.8943,7.3598,7.9902,6.7434,7.9263,7.3598,7.1828,0.7860,1.3529,0.6765,0.00e+00
+4,4.3113,6.2129,6.4441,5.6626,6.8883,6.2129,5.9038,0.8889,1.6026,0.4007,0.00e+00
