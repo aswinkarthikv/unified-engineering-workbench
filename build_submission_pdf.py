@@ -158,7 +158,7 @@ def build_pdf():
     meta_data = [
         [Paragraph("<b>Candidate Name:</b> Aswin Karthik Vijayakumar", body_style), Paragraph("<b>Registration No:</b> RA2311003050416", body_style)],
         [Paragraph("<b>Candidate Email:</b> av8243@srmist.edu.in", body_style), Paragraph("<b>Submission Deadline:</b> 02-11-2026 (10:00 AM)", body_style)],
-        [Paragraph("<b>Packaged Archive:</b> RA2311003050416_Workbench.zip", body_style), Paragraph("<b>Target Environment:</b> Windows 11 x64 (Native C++17 Core)", body_style)]
+        [Paragraph("<b>GitHub Repository:</b> <font color='#2563eb'><u>github.com/aswinkarthikv/unified-engineering-workbench</u></font>", body_style), Paragraph("<b>Target Environment:</b> Windows 11 x64 (Native C++17 Core)", body_style)]
     ]
     t_meta = Table(meta_data, colWidths=[250, 254])
     t_meta.setStyle(TableStyle([
@@ -518,7 +518,8 @@ def build_pdf():
 
     story.append(Paragraph("Submission Checklist & Google Form Verification", h2_style))
     story.append(Paragraph(
-        "All required deliverables from Section 8 of the brief are complete and bundled:<br/>"
+        "All required deliverables from Section 8 of the brief are complete and publicly available:<br/>"
+        "&bull; <b>GitHub Repository:</b> <font color='#2563eb'><u>https://github.com/aswinkarthikv/unified-engineering-workbench</u></font><br/>"
         "&bull; <b>Executable:</b> <code>Launch.exe</code> packaged with offline frontend in <code>src/frontend/</code>.<br/>"
         "&bull; <b>Source Code &amp; CMake:</b> <code>src/backend/</code> and <code>CMakeLists.txt</code> with compiler flags.<br/>"
         "&bull; <b>Datasets with Provenance:</b> <code>data/cad/</code> and <code>data/ansys/</code> with schema notes.<br/>"
