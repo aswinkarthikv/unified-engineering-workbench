@@ -1,7 +1,7 @@
 # Timestamped Walkthrough & Verification Execution Log
 
 **Assessment**: Pass Science Works R&D Internship 2026-2027  
-**Candidate**: Aswin Karthik V (Team D)  
+**Candidate**: Aswin Karthik V  
 **Execution Timestamp**: `2026-10-31T18:31:25+05:30`  
 **Host Environment**: Windows 11 x64 (Build 22631) &bull; Intel(R) Core(TM) i5-13420H (8 threads) &bull; 16 GB RAM  
 

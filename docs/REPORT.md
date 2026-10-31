@@ -1,6 +1,6 @@
 # Unified Engineering Workbench: Technical Report
 **Pass Science Works | R&D Internship 2026-2027 Assessment**  
-**Candidate Name**: Aswin Karthik V (Team D)  
+**Candidate Name**: Aswin Karthik V  
 **Date**: October 31, 2026  
 **Target Operating System**: Windows 11 x64  
 

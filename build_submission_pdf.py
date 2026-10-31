@@ -157,7 +157,7 @@ def build_pdf():
 
     meta_data = [
         [Paragraph("<b>Candidate Name:</b> Aswin Karthik V", body_style), Paragraph("<b>Submission Deadline:</b> 02-11-2026 (10:00 AM)", body_style)],
-        [Paragraph("<b>Team / Identification:</b> Team D (Ganesh, Sriram, Akash, Rahul)", body_style), Paragraph("<b>Target Environment:</b> Windows 11 x64 (Native C++17 Core)", body_style)],
+        [Paragraph("<b>Candidate Email:</b> aswinkarthikv@gmail.com", body_style), Paragraph("<b>Target Environment:</b> Windows 11 x64 (Native C++17 Core)", body_style)],
         [Paragraph("<b>Packaged Archive:</b> CandidateID_Workbench.zip (6.48 MB)", body_style), Paragraph("<b>Assessment Scope:</b> 100-Point Rubric (Interview Progression)", body_style)]
     ]
     t_meta = Table(meta_data, colWidths=[250, 254])

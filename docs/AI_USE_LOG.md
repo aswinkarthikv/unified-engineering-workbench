@@ -1,7 +1,7 @@
 # AI-Assisted Engineering Disclosure & Validation Log
 
 **Assessment**: Pass Science Works R&D Internship 2026-2027  
-**Candidate**: Aswin Karthik V (Team D)  
+**Candidate**: Aswin Karthik V  
 **Date**: October 31, 2026  
 **Tools Used**: Antigravity Assistant (Google DeepMind Gemini 3.8 Pro / Flash Agentic Engine)
 
