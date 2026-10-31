@@ -1,6 +1,7 @@
 # Unified Engineering Workbench
 ### Common Technical Internship Assignment &bull; Pass Science Works R&D 2026-2027
 
+[![CI & Deployment Pipeline](https://github.com/aswinkarthikv/unified-engineering-workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/aswinkarthikv/unified-engineering-workbench/actions/workflows/ci.yml)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C?logo=c%2B%2B&logoColor=white)](https://en.cppreference.com/w/cpp/17)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2011%20x64-blue?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![Tests](https://img.shields.io/badge/Tests-12%2F12%20Passed%20(100%25)-success)](tests/test_all.cpp)

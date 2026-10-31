@@ -1,0 +1,128 @@
+name: CI & Deployment Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-test:
+    name: Build & Verify C++17 Core (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup MSVC Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup CMake & Ninja
+        uses: ashutoshvarma/setup-ninja@v1.1
+
+      - name: Configure CMake (MSVC x64)
+        run: |
+          cmake -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Launch.exe & Test Runner
+        run: |
+          cmake --build build --config Release
+
+      - name: Run Automated CTest Suite
+        run: |
+          ctest --test-dir build --output-on-failure
+
+      - name: Run Standalone Test Runner (12 Tests)
+        run: |
+          .\tests\test_runner.exe
+
+      - name: Verify Launch.exe CLI Export
+        run: |
+          .\Launch.exe --test
+          .\Launch.exe --export-all
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release-binaries
+          path: |
+            Launch.exe
+            CandidateID_Workbench_Submission.pdf
+            RA2311003050416_Workbench_Submission.pdf
+            RA2311003050416_Workbench.zip
+            results/
+            docs/
+
+  deploy-pages:
+    name: Deploy Interactive Console to GitHub Pages
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: src/frontend
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  create-release:
+    name: Create GitHub Release v1.0.0
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create or Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: "v1.0.0 - Unified Engineering Workbench (Official Release)"
+          body: |
+            ## Pass Science Works R&D Internship 2026-2027 Assessment Submission
+            **Candidate**: Aswin Karthik Vijayakumar (RA2311003050416)
+            **Email**: av8243@srmist.edu.in
+
+            ### Deliverables Included in this Release:
+            1. **`Launch.exe`**: Standalone One-Click Windows 11 Executable (35ms launch, Zero-install).
+            2. **`RA2311003050416_Workbench_Submission.pdf`**: Complete 8-Page Submission PDF (746 KB ≤ 1 MB Google Form Compliant).
+            3. **`RA2311003050416_Workbench.zip`**: Full source, data provenance, 12 unit tests, and publication plots archive.
+            
+            ### Automated Verification:
+            * C++17 Core Build & Test: **100% Passed (12/12 Tests)**
+            * FEA Mesh Convergence: **Exact $O(h^2)$ Second-Order Rate ($\alpha = 2.00$)**
+            * Multicore Parallel Agreement: **$\le 10^{-8\ \circ}\text{C}$ Passed ($0.00 \times 10^{00\ \circ}\text{C}$)**
+            * Backpropagation Numerical Gradient Error: **$\le 3.55 \times 10^{-11} \le 10^{-5}$**
+          draft: false
+          prerelease: false
+          files: |
+            Launch.exe
+            CandidateID_Workbench_Submission.pdf
+            RA2311003050416_Workbench_Submission.pdf
+            RA2311003050416_Workbench.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
