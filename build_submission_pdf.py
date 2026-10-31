@@ -36,7 +36,7 @@ class NumberedCanvas(canvas.Canvas):
         if self._pageNumber <= 6:
             # Header
             self.drawString(54, 750, "PASS SCIENCE WORKS  |  R&D INTERNSHIP 2026-2027  |  RA2311003050416")
-            self.drawRightString(612 - 54, 750, "CANDIDATE SUBMISSION REPORT")
+            self.drawRightString(612 - 54, 750, "github.com/aswinkarthikv/unified-engineering-workbench")
             self.setStrokeColor(colors.HexColor("#cbd5e1"))
             self.setLineWidth(0.5)
             self.line(54, 744, 612 - 54, 744)
@@ -158,7 +158,7 @@ def build_pdf():
     meta_data = [
         [Paragraph("<b>Candidate Name:</b> Aswin Karthik Vijayakumar", body_style), Paragraph("<b>Registration No:</b> RA2311003050416", body_style)],
         [Paragraph("<b>Candidate Email:</b> av8243@srmist.edu.in", body_style), Paragraph("<b>Submission Deadline:</b> 02-11-2026 (10:00 AM)", body_style)],
-        [Paragraph("<b>GitHub Repository:</b> <font color='#2563eb'><u>github.com/aswinkarthikv/unified-engineering-workbench</u></font>", body_style), Paragraph("<b>Target Environment:</b> Windows 11 x64 (Native C++17 Core)", body_style)]
+        [Paragraph("<b>GitHub Repository:</b> <a href='https://github.com/aswinkarthikv/unified-engineering-workbench'><font color='#2563eb'><u>https://github.com/aswinkarthikv/unified-engineering-workbench</u></font></a>", body_style), Paragraph("<b>Target Environment:</b> Windows 11 x64 (Native C++17 Core)", body_style)]
     ]
     t_meta = Table(meta_data, colWidths=[250, 254])
     t_meta.setStyle(TableStyle([
@@ -519,7 +519,8 @@ def build_pdf():
     story.append(Paragraph("Submission Checklist & Google Form Verification", h2_style))
     story.append(Paragraph(
         "All required deliverables from Section 8 of the brief are complete and publicly available:<br/>"
-        "&bull; <b>GitHub Repository:</b> <font color='#2563eb'><u>https://github.com/aswinkarthikv/unified-engineering-workbench</u></font><br/>"
+        "&bull; <b>GitHub Repository:</b> <a href='https://github.com/aswinkarthikv/unified-engineering-workbench'><font color='#2563eb'><u>https://github.com/aswinkarthikv/unified-engineering-workbench</u></font></a><br/>"
+        "&bull; <b>Live Web Console:</b> <a href='https://aswinkarthikv.github.io/unified-engineering-workbench/'><font color='#2563eb'><u>https://aswinkarthikv.github.io/unified-engineering-workbench/</u></font></a><br/>"
         "&bull; <b>Executable:</b> <code>Launch.exe</code> packaged with offline frontend in <code>src/frontend/</code>.<br/>"
         "&bull; <b>Source Code &amp; CMake:</b> <code>src/backend/</code> and <code>CMakeLists.txt</code> with compiler flags.<br/>"
         "&bull; <b>Datasets with Provenance:</b> <code>data/cad/</code> and <code>data/ansys/</code> with schema notes.<br/>"

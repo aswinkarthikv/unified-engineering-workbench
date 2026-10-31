@@ -3,6 +3,8 @@
 **Candidate Name**: Aswin Karthik Vijayakumar  
 **Registration Number**: RA2311003050416  
 **Candidate Email**: av8243@srmist.edu.in  
+**GitHub Repository**: [https://github.com/aswinkarthikv/unified-engineering-workbench](https://github.com/aswinkarthikv/unified-engineering-workbench)  
+**Live Interactive Console**: [https://aswinkarthikv.github.io/unified-engineering-workbench/](https://aswinkarthikv.github.io/unified-engineering-workbench/)  
 **Date**: October 31, 2026  
 **Target Operating System**: Windows 11 x64  
 
