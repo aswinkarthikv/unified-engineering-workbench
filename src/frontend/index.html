@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Engineering Workbench | Pass Science Works R&D</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Vendored Offline Libraries -->
+    <script src="vendor/three.min.js"></script>
+    <script src="vendor/OrbitControls.js"></script>
+    <script src="vendor/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Bar -->
+        <header class="app-header">
+            <div class="brand-section">
+                <div class="brand-logo">PSW</div>
+                <div>
+                    <h1 class="brand-title">Unified Engineering Workbench</h1>
+                    <span class="brand-subtitle">Pass Science Works R&D Internship 2026-2027 &bull; Candidate Edition</span>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="nav-tabs">
+                <button class="tab-btn active" data-tab="tab-geometry">
+                    <span class="icon">&#9651;</span> Geometry (CAD)
+                </button>
+                <button class="tab-btn" data-tab="tab-thermal">
+                    <span class="icon">&#127777;</span> Thermal Analysis & FEA
+                </button>
+                <button class="tab-btn" data-tab="tab-performance">
+                    <span class="icon">&#9889;</span> Multicore Performance
+                </button>
+                <button class="tab-btn" data-tab="tab-hardware">
+                    <span class="icon">&#128268;</span> Embedded Hardware
+                </button>
+                <button class="tab-btn" data-tab="tab-backprop">
+                    <span class="icon">&#129504;</span> Backpropagation
+                </button>
+            </nav>
+
+            <div class="header-status">
+                <span class="status-indicator online" id="server-status-dot"></span>
+                <span class="status-text" id="server-status-text">C++17 Core Active</span>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Global Actionable Notification Banner -->
+            <div id="action-banner" class="notification-banner hidden">
+                <div class="banner-content">
+                    <span class="banner-icon" id="banner-icon">&#9888;</span>
+                    <div>
+                        <strong id="banner-title">Error Title</strong>
+                        <p id="banner-msg">Actionable description here.</p>
+                        <div class="banner-action" id="banner-action"></div>
+                    </div>
+                </div>
+                <button class="banner-close" onclick="dismissBanner()">&times;</button>
+            </div>
+
+            <!-- TAB 1: GEOMETRY VIEW -->
+            <section id="tab-geometry" class="view-panel active">
+                <div class="panel-layout-split">
+                    <!-- 3D Viewport -->
+                    <div class="viewport-card">
+                        <div class="viewport-header">
+                            <span class="viewport-title">3D CAD ASCII STL Viewer</span>
+                            <div class="viewport-controls">
+                                <button class="btn-tool" id="btn-stl-fit" title="Fit to View">Fit to View</button>
+                                <button class="btn-tool" id="btn-stl-wire" title="Toggle Wireframe">Wireframe</button>
+                                <button class="btn-tool" id="btn-stl-reset" title="Reset Camera">Reset Camera</button>
+                            </div>
+                        </div>
+                        <div id="stl-canvas-container" class="three-container"></div>
+                        <div class="viewport-footer">
+                            <span id="stl-facet-status">Facets: -- &bull; Vertices: --</span>
+                            <span class="controls-hint">Controls: Left Click = Orbit | Right Click = Pan | Scroll = Zoom</span>
+                        </div>
+                    </div>
+
+                    <!-- Side Controls & Metadata -->
+                    <div class="sidebar-card">
+                        <h2 class="section-title">Geometry Controls & Validation</h2>
+                        
+                        <div class="control-group">
+                            <label class="control-label">Select ASCII STL Geometry</label>
+                            <select id="stl-preset-select" class="select-input">
+                                <option value="sample">Sample: L_Bracket_Mount (bracket_ascii.stl)</option>
+                                <option value="corrupted_nan">Test Failure: Corrupted NaN Coordinates</option>
+                                <option value="empty">Test Failure: Empty 0-byte File</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Or Upload Custom ASCII STL</label>
+                            <input type="file" id="stl-file-input" accept=".stl" class="file-input">
+                        </div>
+
+                        <button id="btn-load-stl" class="btn btn-primary">Load & Parse in C++</button>
+
+                        <div class="metadata-block">
+                            <h3 class="meta-heading">Mesh Geometry Metrics</h3>
+                            <div class="meta-grid">
+                                <div class="meta-item"><span class="k">Solid Name:</span><span class="v" id="stl-meta-name">--</span></div>
+                                <div class="meta-item"><span class="k">Triangles:</span><span class="v" id="stl-meta-facets">--</span></div>
+                                <div class="meta-item"><span class="k">Surface Area:</span><span class="v" id="stl-meta-area">--</span></div>
+                                <div class="meta-item"><span class="k">File Size:</span><span class="v" id="stl-meta-size">--</span></div>
+                                <div class="meta-item full"><span class="k">Bounding Box:</span><span class="v" id="stl-meta-bbox">--</span></div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>Task B Validation Protocol</h4>
+                            <p>All parsing is executed strictly within the C++17 core. Binary STL inputs, non-finite (NaN/Inf) coordinates, and incomplete outer loops are systematically rejected with actionable error guidance.</p>
+                            <p class="tested-limit"><strong>Tested Limit:</strong> 50 MB ASCII STL (~250,000 facets).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: THERMAL ANALYSIS & FEA -->
+            <section id="tab-thermal" class="view-panel">
+                <div class="subtabs-bar">
+                    <button class="subtab-btn active" data-subtab="sub-fea">1D Mechanical Thermal FEA Rod</button>
+                    <button class="subtab-btn" data-subtab="sub-ansys">ANSYS 3D Nodal Temperature Results</button>
+                </div>
+
+                <!-- Subtab A: 1D Thermal FEA Rod -->
+                <div id="sub-fea" class="subtab-content active">
+                    <div class="panel-layout-split">
+                        <div class="plot-card">
+                            <div class="card-header-flex">
+                                <h3>Temperature Distribution: Analytical vs Finite Element</h3>
+                                <button id="btn-export-fea-csv" class="btn btn-sm btn-outline">Export FEA CSV</button>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-fea-temperature"></canvas>
+                            </div>
+                            <div class="fea-summary-banner">
+                                <div class="summary-stat">
+                                    <span class="stat-lbl">Midpoint Max Abs Error</span>
+                                    <span class="stat-val" id="fea-max-error">--</span>
+                                </div>
+                                <div class="summary-stat">
+                                    <span class="stat-lbl">Theoretical Error ($\frac{q h^2}{8k}$)</span>
+                                    <span class="stat-val" id="fea-th-error">--</span>
+                                </div>
+                                <div class="summary-stat">
+                                    <span class="stat-lbl">$L_2$ Norm Error</span>
+                                    <span class="stat-val" id="fea-l2-error">--</span>
+                                </div>
+                                <div class="summary-stat">
+                                    <span class="stat-lbl">Convergence Rate</span>
+                                    <span class="stat-val highlight" id="fea-order">$\approx 2.00$ ($O(h^2)$)</span>
+                                </div>
+                            </div>
+
+                            <div class="table-container">
+                                <h4>Mesh Convergence Study ($N = 10, 20, 40, 80$ Elements)</h4>
+                                <table class="data-table" id="table-convergence">
+                                    <thead>
+                                        <tr>
+                                            <th>Elements ($N$)</th>
+                                            <th>Step $h$ [m]</th>
+                                            <th>Max Midpoint Error [$^\circ$C]</th>
+                                            <th>Theoretical Error [$^\circ$C]</th>
+                                            <th>Observed Order ($\alpha$)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="convergence-tbody">
+                                        <!-- Populated via API -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h2 class="section-title">FEA Solver Parameters</h2>
+                            <form id="fea-params-form">
+                                <div class="control-group">
+                                    <label class="control-label">Uniform Elements ($N$)</label>
+                                    <select id="fea-n-elements" class="select-input">
+                                        <option value="10">N = 10 (h = 0.1 m)</option>
+                                        <option value="20">N = 20 (h = 0.05 m)</option>
+                                        <option value="40">N = 40 (h = 0.025 m)</option>
+                                        <option value="80" selected>N = 80 (h = 0.0125 m)</option>
+                                        <option value="160">N = 160 (h = 0.00625 m)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="control-group">
+                                        <label class="control-label">Length $L$ [m]</label>
+                                        <input type="number" id="fea-length" value="1.0" step="0.1" class="text-input">
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Area $A$ [$\text{m}^2$]</label>
+                                        <input type="number" id="fea-area" value="0.0001" step="0.00001" class="text-input">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="control-group">
+                                        <label class="control-label">Conductivity $k$ [$\text{W/(m}\cdot\text{K)}$]</label>
+                                        <input type="number" id="fea-k" value="10.0" step="1.0" class="text-input">
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Heat Gen $q$ [$\text{W/m}^3$]</label>
+                                        <input type="number" id="fea-q" value="10000.0" step="1000.0" class="text-input">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="control-group">
+                                        <label class="control-label">Boundary $T(0)$ [$^\circ$C]</label>
+                                        <input type="number" id="fea-t0" value="100.0" step="5.0" class="text-input">
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Boundary $T(L)$ [$^\circ$C]</label>
+                                        <input type="number" id="fea-tl" value="20.0" step="5.0" class="text-input">
+                                    </div>
+                                </div>
+
+                                <button type="button" id="btn-run-fea" class="btn btn-primary full-width">Solve 1D Thermal FEA</button>
+                            </form>
+
+                            <div class="info-card">
+                                <h4>Engineering Formulation & BCs</h4>
+                                <p>Governing Equation: $-\frac{d}{dx}\left(k A \frac{dT}{dx}\right) = q A$</p>
+                                <p>Boundary Conditions: $T(0) = 100^\circ\text{C}$, $T(L) = 20^\circ\text{C}$</p>
+                                <p>Exact Solution: $T_{\text{exact}}(x) = 100 - 80\frac{x}{L} + \frac{q}{2k}x(L-x)$</p>
+                                <p><strong>Key Insight:</strong> 1D 2-node linear elements yield exact nodal temperatures; the midpoint error is quadratic: $\text{Error}_{\text{mid}} = \frac{q h_e^2}{8k}$, proving exact 2nd-order convergence.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subtab B: ANSYS 3D Point Cloud -->
+                <div id="sub-ansys" class="subtab-content">
+                    <div class="panel-layout-split">
+                        <div class="viewport-card">
+                            <div class="viewport-header">
+                                <span class="viewport-title">ANSYS Nodal Temperature 3D Point Cloud</span>
+                                <div class="viewport-controls">
+                                    <button class="btn-tool" id="btn-ansys-fit">Fit to View</button>
+                                    <span class="legend-badge" id="ansys-legend-badge">Legend: 14.9&deg;C &rarr; 187.9&deg;C</span>
+                                </div>
+                            </div>
+                            <div id="ansys-canvas-container" class="three-container"></div>
+                            <div class="viewport-footer">
+                                <span id="ansys-inspect-info">Hover or click a node in 3D to inspect temperature and coordinates</span>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h2 class="section-title">ANSYS Results Import</h2>
+                            <div class="synthetic-badge">SYNTHETIC ANSYS DATASET (Task B Compliant)</div>
+
+                            <div class="control-group">
+                                <label class="control-label">Preset Dataset</label>
+                                <select id="ansys-preset-select" class="select-input">
+                                    <option value="sample">Synthetic Rod 525-Node Results (synthetic_rod_ansys.csv)</option>
+                                    <option value="missing_cols">Test Failure: Missing Required Columns</option>
+                                    <option value="non_finite">Test Failure: Non-finite NaN Temperature</option>
+                                </select>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Or Upload Custom ANSYS CSV</label>
+                                <input type="file" id="ansys-file-input" accept=".csv" class="file-input">
+                            </div>
+
+                            <button id="btn-load-ansys" class="btn btn-primary">Parse in C++ & Render</button>
+
+                            <div class="metadata-block">
+                                <h3 class="meta-heading">ANSYS Dataset Metrics</h3>
+                                <div class="meta-grid">
+                                    <div class="meta-item"><span class="k">Total Nodes:</span><span class="v" id="ansys-meta-nodes">--</span></div>
+                                    <div class="meta-item"><span class="k">Min Temp:</span><span class="v" id="ansys-meta-min">--</span></div>
+                                    <div class="meta-item"><span class="k">Max Temp:</span><span class="v" id="ansys-meta-max">--</span></div>
+                                    <div class="meta-item"><span class="k">Mean Temp:</span><span class="v" id="ansys-meta-mean">--</span></div>
+                                    <div class="meta-item full"><span class="k">Bounding Box:</span><span class="v" id="ansys-meta-bbox">--</span></div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <h4>Schema Requirements</h4>
+                                <p>Mandatory columns: <code>node_id, x_m, y_m, z_m, temperature_C</code>.</p>
+                                <p class="tested-limit"><strong>Tested Limit:</strong> 100 MB CSV (~500,000 nodes).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: MULTICORE PERFORMANCE -->
+            <section id="tab-performance" class="view-panel">
+                <div class="panel-layout-split">
+                    <div class="plot-card">
+                        <div class="card-header-flex">
+                            <h3>Multithreaded CPU Scaling: Speedup & Parallel Efficiency</h3>
+                            <button id="btn-export-bench-csv" class="btn btn-sm btn-outline">Export Benchmark CSV</button>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="chart-multicore"></canvas>
+                        </div>
+
+                        <div class="verification-badge verified" id="bench-agree-badge">
+                            <span class="icon">&#10003;</span>
+                            <div>
+                                <strong>Deterministic Serial &harr; Parallel Agreement Verified:</strong>
+                                <span id="bench-agree-text">Max temperature difference: 0.00e+00 &deg;C &le; 1e-8 &deg;C</span>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <h4>Multicore Benchmark Measurements (5 Repetitions + Warm-up)</h4>
+                            <table class="data-table" id="table-bench">
+                                <thead>
+                                    <tr>
+                                        <th>Workers ($p$)</th>
+                                        <th>Reps (ms)</th>
+                                        <th>Median (ms)</th>
+                                        <th>Mean &plusmn; StdDev</th>
+                                        <th>Speedup ($T_1/T_p$)</th>
+                                        <th>Efficiency</th>
+                                        <th>Agreement Diff</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bench-tbody">
+                                    <!-- Populated via API -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h2 class="section-title">Hardware Detection & Benchmark</h2>
+
+                        <div class="hw-spec-card">
+                            <div class="hw-spec-row"><span class="k">CPU:</span><span class="v" id="hw-cpu">Detecting...</span></div>
+                            <div class="hw-spec-row"><span class="k">Cores:</span><span class="v" id="hw-cores">-- Physical / -- Logical</span></div>
+                            <div class="hw-spec-row"><span class="k">RAM:</span><span class="v" id="hw-ram">-- MB</span></div>
+                            <div class="hw-spec-row"><span class="k">Compiler:</span><span class="v" id="hw-compiler">GCC 16.2.0 MinGW-w64</span></div>
+                            <div class="hw-spec-row"><span class="k">Optimization:</span><span class="v" id="hw-flags">-O3 -march=native -DNDEBUG</span></div>
+                            <div class="hw-spec-row"><span class="k">Launch-to-Ready:</span><span class="v" id="hw-launch">-- ms</span></div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Batch Workload Size (Independent Solves)</label>
+                            <input type="number" id="bench-cases" value="5000" min="100" max="50000" step="500" class="text-input">
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Mesh Elements per Case ($N$)</label>
+                            <input type="number" id="bench-mesh-n" value="50" min="10" max="500" step="10" class="text-input">
+                        </div>
+
+                        <div class="btn-group">
+                            <button id="btn-run-benchmark" class="btn btn-primary">Run Multicore Benchmark</button>
+                            <button id="btn-cancel-benchmark" class="btn btn-secondary" disabled>Cancel</button>
+                        </div>
+
+                        <div class="progress-bar-container hidden" id="bench-progress-wrap">
+                            <div class="progress-bar-fill" id="bench-progress-bar"></div>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>Concurrency Architecture</h4>
+                            <p>Bounded thread pool chunking allocates independent thermal solves to prevent dynamic thread creation overhead. Task ordering is strictly deterministic across serial and parallel runs.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: EMBEDDED HARDWARE WORKBENCH -->
+            <section id="tab-hardware" class="view-panel">
+                <div class="panel-layout-split">
+                    <div class="plot-card">
+                        <h3>Modular Host-Connected Hardware Architecture</h3>
+                        
+                        <!-- Embedded Block Diagram -->
+                        <div class="block-diagram-container">
+                            <div class="diagram-host">
+                                <div class="box-header">Host PC / Workstation</div>
+                                <div class="box-body">Unified Engineering Workbench Core<br><small>Windows 11 x64 &bull; USB 3.0 / USB-C</small></div>
+                            </div>
+                            <div class="diagram-buses">
+                                <div class="bus-arrow">&darr; USB VBUS 5V + USB CDC-ACM (921,600 baud)</div>
+                                <div class="bus-arrow">&darr; FTDI FT2232H High-Speed USB FIFO / UART</div>
+                                <div class="bus-arrow">&darr; USB Bulk Transfer (ST-Link / CMSIS-DAP)</div>
+                            </div>
+                            <div class="diagram-devices-grid">
+                                <div class="diagram-dev-box mcu">
+                                    <div class="dev-box-title">Microcontroller Board</div>
+                                    <div class="dev-box-detail">STM32H753ZI (Cortex-M7 @ 480 MHz)<br>3.3V Logic &bull; Level Shifted Sensor Bus</div>
+                                </div>
+                                <div class="diagram-dev-box fpga">
+                                    <div class="dev-box-title">FPGA Board</div>
+                                    <div class="dev-box-detail">Xilinx Artix-7 XC7A35T<br>1.0V Core &bull; 1.8V Aux &bull; 3.3V Bank I/O</div>
+                                </div>
+                                <div class="diagram-dev-box jtag">
+                                    <div class="dev-box-title">JTAG Debug Adapter</div>
+                                    <div class="dev-box-detail">ST-Link V3 Modular Probe<br>Passive VREF Monitor &bull; TAP Controller</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Telemetry Stream -->
+                        <div class="telemetry-cards-grid" id="telemetry-cards-container">
+                            <!-- Populated dynamically via C++ Mock Adapter API -->
+                        </div>
+
+                        <div class="table-container">
+                            <h4>Pin-Voltage & Interface Domain Matrix</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Device</th>
+                                        <th>Power Rail</th>
+                                        <th>Ground Domain</th>
+                                        <th>Host Protocol</th>
+                                        <th>Level Shifter</th>
+                                        <th>JTAG Role & Signal Ownership</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>MCU (STM32H7)</strong></td>
+                                        <td>5V USB VBUS &rarr; 3.3V LDO</td>
+                                        <td>Common Chassis GND</td>
+                                        <td>USB CDC-ACM @ 921600 baud</td>
+                                        <td>Internal 5V-tolerant LVCMOS</td>
+                                        <td>Slave TAP (SWCLK, SWDIO, nRST)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>FPGA (Artix-7)</strong></td>
+                                        <td>1.0V VCCINT, 1.8V VCCAUX, 3.3V VCCO</td>
+                                        <td>Isolated Digital GND</td>
+                                        <td>FT2232H High-Speed FIFO</td>
+                                        <td>TXS0108E Bi-directional translator</td>
+                                        <td>Boundary-scan TAP (TCK, TMS, TDI, TDO)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>JTAG Adapter</strong></td>
+                                        <td>Host USB 5V (Target VREF Sensed)</td>
+                                        <td>Shared Target GND Reference</td>
+                                        <td>USB 2.0 Bulk 480 Mbps</td>
+                                        <td>Target VREF sensing buffer (1.65-3.6V)</td>
+                                        <td><strong>Bus Master</strong>: Drives clock & states; NOT a compute board!</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h2 class="section-title">Device Mock Controls</h2>
+                        <div class="sim-alert">
+                            <span class="icon">&#9888;</span> <strong>[SIMULATED HARDWARE]</strong> All board adapters run through C++ mock interfaces.
+                        </div>
+
+                        <div class="device-actions-list">
+                            <div class="dev-action-card">
+                                <h4>STM32H7 Microcontroller</h4>
+                                <div class="btn-row">
+                                    <button class="btn btn-sm btn-outline" onclick="deviceAction('STM32', 'connect')">Connect</button>
+                                    <button class="btn btn-sm btn-outline" onclick="deviceAction('STM32', 'disconnect')">Disconnect</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deviceAction('STM32', 'inject_timeout')">Inject Timeout</button>
+                                    <button class="btn btn-sm btn-success" onclick="deviceAction('STM32', 'recover')">Recover</button>
+                                </div>
+                            </div>
+
+                            <div class="dev-action-card">
+                                <h4>Xilinx Artix-7 FPGA</h4>
+                                <div class="btn-row">
+                                    <button class="btn btn-sm btn-outline" onclick="deviceAction('Artix', 'connect')">Connect</button>
+                                    <button class="btn btn-sm btn-outline" onclick="deviceAction('Artix', 'disconnect')">Disconnect</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deviceAction('Artix', 'inject_timeout')">Inject Timeout</button>
+                                    <button class="btn btn-sm btn-success" onclick="deviceAction('Artix', 'recover')">Recover</button>
+                                </div>
+                            </div>
+
+                            <div class="dev-action-card">
+                                <h4>ST-Link V3 JTAG Adapter</h4>
+                                <div class="btn-row">
+                                    <button class="btn btn-sm btn-outline" onclick="deviceAction('JTAG', 'connect')">Connect</button>
+                                    <button class="btn btn-sm btn-outline" onclick="deviceAction('JTAG', 'disconnect')">Disconnect</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deviceAction('JTAG', 'inject_timeout')">Inject Timeout</button>
+                                    <button class="btn btn-sm btn-success" onclick="deviceAction('JTAG', 'recover')">Recover</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>Why JTAG is a Debug Interface</h4>
+                            <p>A JTAG probe is an IEEE 1149.1 Test Access Port master. It provides dedicated state-machine clocks and instruction registers to read CPU registers, set hardware breakpoints, and program flash. It does not execute user firmware or stream general-purpose application compute.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: BACKPROPAGATION -->
+            <section id="tab-backprop" class="view-panel">
+                <div class="panel-layout-split">
+                    <div class="plot-card">
+                        <div class="card-header-flex">
+                            <h3>Task F: Regression Backpropagation &amp; 100-Step Loss Convergence</h3>
+                            <button id="btn-export-bp-csv" class="btn btn-sm btn-outline">Export Training CSV</button>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="chart-backprop"></canvas>
+                        </div>
+
+                        <div class="table-container">
+                            <h4>Central Finite Difference Gradient Verification ($\epsilon = 10^{-6}$, Tolerance $\le 10^{-5}$)</h4>
+                            <table class="data-table" id="table-bp-checks">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Analytical Derivative ($\frac{\partial J}{\partial \theta}$)</th>
+                                        <th>Finite Difference ($g_{\text{num}}$)</th>
+                                        <th>Absolute Error</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bp-checks-tbody">
+                                    <!-- Populated via API -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="math-equations-box">
+                            <h4>Complete Analytical Derivation (Sample: $x=1, y=2$)</h4>
+                            <div class="equation-row">$$\text{Hidden State: } z = wx + b = (0.5)(1) + 0 = 0.5 \quad \implies \quad h = \tanh(0.5) \approx 0.462117$$</div>
+                            <div class="equation-row">$$\text{Prediction: } \hat{y} = vh + c = (1)(0.462117) + 0 = 0.462117 \quad \implies \quad e = \hat{y} - y = -1.537883$$</div>
+                            <div class="equation-row">$$\text{Loss: } J = \frac{1}{2}(\hat{y} - y)^2 = \frac{1}{2}(-1.537883)^2 \approx 1.182542$$</div>
+                            <div class="equation-row">$$\frac{\partial J}{\partial c} = -1.537883, \quad \frac{\partial J}{\partial v} = -0.710682, \quad \frac{\partial J}{\partial w} = -1.209464, \quad \frac{\partial J}{\partial b} = -1.209464$$</div>
+                            <div class="equation-row">$$\text{Simultaneous Update } (\eta=0.1): w_1 = 0.620946, \; b_1 = 0.120946, \; v_1 = 1.071068, \; c_1 = 0.153788$$</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h2 class="section-title">Handwritten Appendix Access</h2>
+
+                        <div class="handwritten-preview-card">
+                            <div class="hw-icon">&#128221;</div>
+                            <h4>Handwritten Backprop Derivation</h4>
+                            <p>Includes complete manual chain-rule expansion, exact arithmetic verification, gradient direction explanation, and 2-page handwritten sheet.</p>
+                            <a href="docs/handwritten_backprop_p1.png" target="_blank" class="btn btn-secondary full-width">View Page 1 Scan</a>
+                            <a href="docs/handwritten_backprop_p2.png" target="_blank" class="btn btn-secondary full-width" style="margin-top: 6px;">View Page 2 Scan</a>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>Gradient Direction Explanation</h4>
+                            <p>Because the initial prediction $\hat{y} \approx 0.462$ is less than the target $y = 2$, the residual error $(\hat{y} - y)$ is negative. Every parameter derivative is therefore negative.</p>
+                            <p>Gradient descent steps in the negative gradient direction ($-\eta \frac{\partial J}{\partial \theta}$), thereby <strong>increasing</strong> the weights and biases to push the prediction up towards 2.0 and drive loss to zero.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
