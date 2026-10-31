@@ -302,7 +302,7 @@ HttpResponse HttpServer::handle_request(const HttpRequest& req) {
     HttpResponse res;
     if (it != routes.end()) {
         res = it->second(req);
-    } else if (req.method == "GET") {
+    } else if (req.method == "GET" || req.method == "HEAD") {
         res = serve_static_file(req.path);
     } else {
         res = {404, "application/json", "{\"error\":\"Route not found: " + route_key + "\"}"};
@@ -459,7 +459,14 @@ void HttpServer::run_listener() {
                 response_stream << res.body;
 
                 std::string full_res = response_stream.str();
-                send(client_sock, full_res.data(), static_cast<int>(full_res.size()), 0);
+                const char* send_ptr = full_res.data();
+                int total_to_send = static_cast<int>(full_res.size());
+                while (total_to_send > 0) {
+                    int sent = send(client_sock, send_ptr, total_to_send, 0);
+                    if (sent <= 0) break;
+                    send_ptr += sent;
+                    total_to_send -= sent;
+                }
             }
             closesocket(client_sock);
         }).detach();
