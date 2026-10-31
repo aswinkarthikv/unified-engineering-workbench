@@ -47,9 +47,8 @@ class NumberedCanvas(canvas.Canvas):
             page_text = f"Page {self._pageNumber} of {page_count}"
             self.drawRightString(612 - 54, 34, page_text)
         else:
-            # Appendix pages
-            self.drawString(54, 34, "Aswin Karthik Vijayakumar (RA2311003050416)  •  Task F Handwritten Backprop Appendix")
-            self.drawRightString(612 - 54, 34, f"Appendix Page {self._pageNumber - 6} of 2  (Page {self._pageNumber} of {page_count})")
+            # Appendix pages: self-contained scans
+            pass
 
         self.restoreState()
 
@@ -534,17 +533,11 @@ def build_pdf():
     story.append(PageBreak())
 
     # PAGE 7: HANDWRITTEN DERIVATION APPENDIX (PAGE 1)
-    story.append(Paragraph("Appendix A: Task F Handwritten Backpropagation Derivation (Page 1 of 2)", h1_style))
-    story.append(Paragraph("<i>Forward pass, hidden activation tanh(z), residual error, loss evaluation, and computational flow graph.</i>", subtitle_style))
-    story.append(RLImage("docs/temp_img/hw_p1.jpg", width=6.5*inch, height=7.8*inch))
-
+    story.append(RLImage("docs/temp_img/hw_p1.jpg", width=7.0*inch, height=9.2*inch))
     story.append(PageBreak())
 
     # PAGE 8: HANDWRITTEN DERIVATION APPENDIX (PAGE 2)
-    story.append(Paragraph("Appendix B: Task F Handwritten Backpropagation Derivation (Page 2 of 2)", h1_style))
-    story.append(Paragraph("<i>Manual chain-rule derivatives, gradient direction explanation, simultaneous parameter update, and finite difference verification.</i>", subtitle_style))
-    story.append(RLImage("docs/temp_img/hw_p2.jpg", width=6.5*inch, height=7.8*inch))
-
+    story.append(RLImage("docs/temp_img/hw_p2.jpg", width=7.0*inch, height=9.2*inch))
     # Build PDF
     doc.build(story, canvasmaker=NumberedCanvas)
     
