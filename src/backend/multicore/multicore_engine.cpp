@@ -1,3 +1,7 @@
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include "multicore_engine.hpp"
 #include <thread>
 #include <mutex>
@@ -14,6 +18,8 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <intrin.h>
+#undef min
+#undef max
 #endif
 
 namespace workbench::multicore {

@@ -1,3 +1,10 @@
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#endif
+
 #include "http_server.hpp"
 #include "fea_solver.hpp"
 #include "cad_ansys_parser.hpp"
@@ -338,7 +345,7 @@ void HttpServer::stop() {
     if (s != INVALID_SOCKET) {
         sockaddr_in addr{};
         addr.sin_family = AF_INET;
-        addr.sin_port = htons(server_port);
+        addr.sin_port = htons(static_cast<u_short>(server_port));
         addr.sin_addr.s_addr = inet_addr("127.0.0.1");
         connect(s, (sockaddr*)&addr, sizeof(addr));
         closesocket(s);
@@ -368,12 +375,12 @@ void HttpServer::run_listener() {
     sockaddr_in server_addr{};
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    server_addr.sin_port = htons(server_port);
+    server_addr.sin_port = htons(static_cast<u_short>(server_port));
 
     if (bind(listen_sock, (sockaddr*)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
         // Try fallback port
         server_port++;
-        server_addr.sin_port = htons(server_port);
+        server_addr.sin_port = htons(static_cast<u_short>(server_port));
         if (bind(listen_sock, (sockaddr*)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
             closesocket(listen_sock);
             running.store(false);
