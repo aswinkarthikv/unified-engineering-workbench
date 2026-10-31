@@ -1,0 +1,15 @@
+# Build outputs
+build/
+CMakeFiles/
+CMakeCache.txt
+*.o
+*.obj
+*.s
+*.res
+*.log
+err.txt
+out.txt
+
+# OS / Editor
+.DS_Store
+Thumbs.db
