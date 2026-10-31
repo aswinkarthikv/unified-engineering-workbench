@@ -35,7 +35,7 @@ class NumberedCanvas(canvas.Canvas):
         # Suppress headers/footers on appendix full-image pages (pages 7 and 8)
         if self._pageNumber <= 6:
             # Header
-            self.drawString(54, 750, "PASS SCIENCE WORKS  |  R&D INTERNSHIP 2026-2027  |  UNIFIED WORKBENCH")
+            self.drawString(54, 750, "PASS SCIENCE WORKS  |  R&D INTERNSHIP 2026-2027  |  RA2311003050416")
             self.drawRightString(612 - 54, 750, "CANDIDATE SUBMISSION REPORT")
             self.setStrokeColor(colors.HexColor("#cbd5e1"))
             self.setLineWidth(0.5)
@@ -43,12 +43,12 @@ class NumberedCanvas(canvas.Canvas):
             
             # Footer
             self.line(54, 45, 612 - 54, 45)
-            self.drawString(54, 34, "Target OS: Windows 11 x64  |  Standalone Launcher: Launch.exe")
+            self.drawString(54, 34, "Candidate: Aswin Karthik Vijayakumar (RA2311003050416)  |  av8243@srmist.edu.in")
             page_text = f"Page {self._pageNumber} of {page_count}"
             self.drawRightString(612 - 54, 34, page_text)
         else:
             # Appendix pages
-            self.drawString(54, 34, "Unified Engineering Workbench  •  Task F Handwritten Backprop Appendix")
+            self.drawString(54, 34, "Aswin Karthik Vijayakumar (RA2311003050416)  •  Task F Handwritten Backprop Appendix")
             self.drawRightString(612 - 54, 34, f"Appendix Page {self._pageNumber - 6} of 2  (Page {self._pageNumber} of {page_count})")
 
         self.restoreState()
@@ -61,7 +61,7 @@ def compress_image_for_pdf(src_path, dst_path, max_dim=1200, quality=75):
     img.save(dst_path, "JPEG", optimize=True, quality=quality)
 
 def build_pdf():
-    pdf_filename = "CandidateID_Workbench_Submission.pdf"
+    pdf_filename = "RA2311003050416_Workbench_Submission.pdf"
     doc = SimpleDocTemplate(
         pdf_filename,
         pagesize=letter,
@@ -156,9 +156,9 @@ def build_pdf():
     story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#0f172a"), spaceAfter=8))
 
     meta_data = [
-        [Paragraph("<b>Candidate Name:</b> Aswin Karthik V", body_style), Paragraph("<b>Submission Deadline:</b> 02-11-2026 (10:00 AM)", body_style)],
-        [Paragraph("<b>Candidate Email:</b> aswinkarthikv@gmail.com", body_style), Paragraph("<b>Target Environment:</b> Windows 11 x64 (Native C++17 Core)", body_style)],
-        [Paragraph("<b>Packaged Archive:</b> CandidateID_Workbench.zip (6.48 MB)", body_style), Paragraph("<b>Assessment Scope:</b> 100-Point Rubric (Interview Progression)", body_style)]
+        [Paragraph("<b>Candidate Name:</b> Aswin Karthik Vijayakumar", body_style), Paragraph("<b>Registration No:</b> RA2311003050416", body_style)],
+        [Paragraph("<b>Candidate Email:</b> av8243@srmist.edu.in", body_style), Paragraph("<b>Submission Deadline:</b> 02-11-2026 (10:00 AM)", body_style)],
+        [Paragraph("<b>Packaged Archive:</b> RA2311003050416_Workbench.zip", body_style), Paragraph("<b>Target Environment:</b> Windows 11 x64 (Native C++17 Core)", body_style)]
     ]
     t_meta = Table(meta_data, colWidths=[250, 254])
     t_meta.setStyle(TableStyle([

@@ -1,6 +1,8 @@
 # Unified Engineering Workbench: Technical Report
 **Pass Science Works | R&D Internship 2026-2027 Assessment**  
-**Candidate Name**: Aswin Karthik V  
+**Candidate Name**: Aswin Karthik Vijayakumar  
+**Registration Number**: RA2311003050416  
+**Candidate Email**: av8243@srmist.edu.in  
 **Date**: October 31, 2026  
 **Target Operating System**: Windows 11 x64  
 

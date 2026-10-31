@@ -1,7 +1,8 @@
 # AI-Assisted Engineering Disclosure & Validation Log
 
 **Assessment**: Pass Science Works R&D Internship 2026-2027  
-**Candidate**: Aswin Karthik V  
+**Candidate**: Aswin Karthik Vijayakumar (RA2311003050416)  
+**Email**: av8243@srmist.edu.in  
 **Date**: October 31, 2026  
 **Tools Used**: Antigravity Assistant (Google DeepMind Gemini 3.8 Pro / Flash Agentic Engine)
 
